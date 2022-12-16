@@ -7,7 +7,7 @@ class Part2 {
     public static void main(String[] args) {
         var result = 0L;
 
-        var input = Utils.readInput(Part1.class);
+        var input = Utils.readInput(Part2.class);
         for (var line : input) {
             var shape1 = Shape.valueOf(line.charAt(0));
             var outcome = Outcome.valueOf(line.charAt(2));

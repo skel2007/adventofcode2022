@@ -29,7 +29,7 @@ enum Shape {
             case 'A' -> Shape.ROCK;
             case 'B' -> Shape.PAPER;
             case 'C' -> Shape.SCISSORS;
-            default -> throw new IllegalStateException("Unexpected value: " + c);
+            default -> throw new IllegalArgumentException("Unexpected value: " + c);
         };
     }
 

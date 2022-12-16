@@ -29,7 +29,7 @@ enum Outcome {
             case 'X' -> LOSE;
             case 'Y' -> DRAW;
             case 'Z' -> WIN;
-            default -> throw new IllegalStateException("Unexpected value: " + c);
+            default -> throw new IllegalArgumentException("Unexpected value: " + c);
         };
     }
 

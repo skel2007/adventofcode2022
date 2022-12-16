@@ -23,7 +23,7 @@ class Part1 {
             case 'X' -> Shape.ROCK;
             case 'Y' -> Shape.PAPER;
             case 'Z' -> Shape.SCISSORS;
-            default -> throw new IllegalStateException("Unexpected value: " + c);
+            default -> throw new IllegalArgumentException("Unexpected value: " + c);
         };
     }
 
