@@ -4,13 +4,13 @@ import java.util.stream.LongStream;
 
 import ru.skel2007.adventofcode2022.Utils;
 
-public class Day01Part2 {
+class Part2 {
 
     public static void main(String[] args) {
         var topCalories = new long[3];
         var currentCalories = 0L;
 
-        var input = Utils.readInput(Day01Part2.class);
+        var input = Utils.readInput(Part2.class);
         for (var line : input) {
             if (line.isBlank()) {
                 recalculateTop(topCalories, currentCalories);

@@ -1,6 +1,6 @@
 package ru.skel2007.adventofcode2022.day02;
 
-public enum Shape {
+enum Shape {
     ROCK(1),
     PAPER(2),
     SCISSORS(3);
@@ -11,20 +11,20 @@ public enum Shape {
         this.score = score;
     }
 
-    public int score() {
+    int score() {
         return score;
     }
 
-    public int score(Shape that) {
+    int score(Shape that) {
         return this.score + outcome(that).score();
     }
 
-    public Outcome outcome(Shape that) {
+    Outcome outcome(Shape that) {
         var ordinal = (4 + this.ordinal() - that.ordinal()) % 3;
         return Outcome.values()[ordinal];
     }
 
-    public static Shape valueOf(char c) {
+    static Shape valueOf(char c) {
         return switch (c) {
             case 'A' -> Shape.ROCK;
             case 'B' -> Shape.PAPER;

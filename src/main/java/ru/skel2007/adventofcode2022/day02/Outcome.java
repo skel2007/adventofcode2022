@@ -1,6 +1,6 @@
 package ru.skel2007.adventofcode2022.day02;
 
-public enum Outcome {
+enum Outcome {
     LOSE(0),
     DRAW(3),
     WIN(6);
@@ -11,11 +11,11 @@ public enum Outcome {
         this.score = score;
     }
 
-    public int score() {
+    int score() {
         return score;
     }
 
-    public int score(Shape shape) {
+    int score(Shape shape) {
         return this.score + shape(shape).score();
     }
 
@@ -24,7 +24,7 @@ public enum Outcome {
         return Shape.values()[ordinal];
     }
 
-    public static Outcome valueOf(char c) {
+    static Outcome valueOf(char c) {
         return switch (c) {
             case 'X' -> LOSE;
             case 'Y' -> DRAW;
