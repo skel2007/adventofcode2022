@@ -11,7 +11,9 @@ final class MarkerFinder {
         for (int i = markerLength; i < line.length(); i++) {
             var set = new HashSet<Character>();
             for (int j = i - markerLength; j < i; j++) {
-                set.add(line.charAt(j));
+                if (!set.add(line.charAt(j))) {
+                    break;
+                }
             }
 
             if (set.size() == markerLength) {
