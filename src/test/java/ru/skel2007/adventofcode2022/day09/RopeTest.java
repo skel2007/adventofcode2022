@@ -3,15 +3,20 @@ package ru.skel2007.adventofcode2022.day09;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RopeTest {
 
-    @Test
-    void rope2() {
-        var rope = new Rope(2);
+    @ParameterizedTest
+    @CsvSource({
+            "2,13",
+            "10,1",
+    })
+    void rope(int size, int expected) {
+        var rope = new Rope(size);
 
         var input = """
                 R 4
@@ -26,6 +31,8 @@ class RopeTest {
 
         for (var line : input) {
             System.out.println(line);
+            System.out.println("----------");
+
             var move = Move.parse(line);
             for (int i = 0; i < move.count(); i++) {
                 rope.move(move.direction());
@@ -35,36 +42,7 @@ class RopeTest {
             System.out.println("==========");
         }
 
-        assertEquals(13, rope.getVisitedByTailCount());
-    }
-
-    @Test
-    void rope10() {
-        var rope = new Rope(10);
-
-        var input = """
-                R 4
-                U 4
-                L 3
-                D 1
-                R 4
-                D 1
-                L 5
-                R 2
-                """.split("\n");
-
-        for (var line : input) {
-            System.out.println(line);
-            var move = Move.parse(line);
-            for (int i = 0; i < move.count(); i++) {
-                rope.move(move.direction());
-                print(rope);
-                System.out.println("----------");
-            }
-            System.out.println("==========");
-        }
-
-        assertEquals(1, rope.getVisitedByTailCount());
+        assertEquals(expected, rope.getVisitedByTailCount());
     }
 
     static void print(Rope rope) {
