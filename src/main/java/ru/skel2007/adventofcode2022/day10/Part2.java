@@ -1,12 +1,14 @@
 package ru.skel2007.adventofcode2022.day10;
 
+import java.util.TreeMap;
+
 import ru.skel2007.adventofcode2022.Utils;
 
 class Part2 {
 
     public static void main(String[] args) {
         var computer = new Computer();
-        var result = new boolean[6][];
+        var result = new TreeMap<Integer, boolean[]>();
 
         var input = Utils.readInput(Part2.class);
         for (var line : input) {
@@ -16,15 +18,11 @@ class Part2 {
                 var lit = pixel >= state.x() - 1 && pixel <= state.x() + 1;
 
                 var row = (state.cycle() -1) / 40;
-                if (pixel == 0) {
-                    result[row] = new boolean[40];
-                }
-
-                result[row][pixel] = lit;
+                result.computeIfAbsent(row, it -> new boolean[40])[pixel] = lit;
             });
         }
 
-        for (boolean[] row : result) {
+        for (boolean[] row : result.values()) {
             for (boolean lit : row) {
                 System.out.print(lit ? '#' : '.');
             }
