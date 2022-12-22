@@ -8,8 +8,12 @@ import java.util.Objects;
 public final class Utils {
 
     public static List<String> readInput(Class<?> clazz) {
+        return readFile(clazz, "input.txt");
+    }
+
+    public static List<String> readFile(Class<?> clazz, String filename) {
         try {
-            var resource = Objects.requireNonNull(clazz.getResource("input.txt"));
+            var resource = Objects.requireNonNull(clazz.getResource(filename));
             return Files.readAllLines(Paths.get(resource.toURI()));
         } catch (Exception e) {
             throw new RuntimeException(e);
