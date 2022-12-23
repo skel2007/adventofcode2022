@@ -10,9 +10,7 @@ import one.util.streamex.StreamEx;
 
 record RouteMap(
         Map<Hill.Point, Node> nodes,
-        Map<Hill.Point, Integer> minRouteLengthMap,
-        Node start,
-        Node end
+        Map<Hill.Point, Integer> minRouteLengthMap
 ) {
 
     static RouteMap parse(List<String> input) {
@@ -25,24 +23,21 @@ record RouteMap(
             node.fillNext(nodes);
         }
 
-        var start = StreamEx.of(nodes.values())
-                .filter(Node::start)
-                .findFirst()
-                .orElseThrow();
+        var minRouteLengthMap = fillMinRouteLengthMap(nodes);
 
-        var end = StreamEx.of(nodes.values())
-                .filter(Node::end)
-                .findFirst()
-                .orElseThrow();
-
-        var minRouteLengthMap = new HashMap<Hill.Point, Integer>();
-        fillMinRouteLength(end, 0, minRouteLengthMap);
-
-        return new RouteMap(nodes, minRouteLengthMap, start, end);
+        return new RouteMap(nodes, minRouteLengthMap);
     }
 
     int minRouteLengthFromStart() {
-        return minRouteLengthMap.get(start.point());
+        return EntryStream.of(nodes)
+                .values()
+                .filter(Node::start)
+                .map(Node::point)
+                .map(minRouteLengthMap::get)
+                .nonNull()
+                .mapToInt(Integer::intValue)
+                .findFirst()
+                .orElseThrow();
     }
 
     int minRouteLengthFromAny() {
@@ -57,7 +52,19 @@ record RouteMap(
                 .orElseThrow();
     }
 
-    private static void fillMinRouteLength(Node node, int minRouteLength, Map<Hill.Point, Integer> minRouteLengthMap) {
+    private static Map<Hill.Point, Integer> fillMinRouteLengthMap(Map<Hill.Point, Node> nodes) {
+        var minRouteLengthMap = new HashMap<Hill.Point, Integer>();
+        var end = StreamEx.of(nodes.values())
+                .filter(Node::end)
+                .findFirst()
+                .orElseThrow();
+
+        fillMinRouteLengthMap(end, 0, minRouteLengthMap);
+
+        return minRouteLengthMap;
+    }
+
+    private static void fillMinRouteLengthMap(Node node, int minRouteLength, Map<Hill.Point, Integer> minRouteLengthMap) {
         var currentMinRouteLength = minRouteLengthMap.getOrDefault(node.point(), Integer.MAX_VALUE);
         if (minRouteLength >= currentMinRouteLength) {
             return;
@@ -66,19 +73,18 @@ record RouteMap(
         minRouteLengthMap.put(node.point(), minRouteLength);
 
         for (var previous : node.previous) {
-            fillMinRouteLength(previous, minRouteLength + 1, minRouteLengthMap);
+            fillMinRouteLengthMap(previous, minRouteLength + 1, minRouteLengthMap);
         }
     }
 
 
     record Node(
             Hill hill,
-            List<Node> previous,
-            List<Node> next
+            List<Node> previous
     ) {
 
         Node(Hill hill) {
-            this(hill, new ArrayList<>(), new ArrayList<>());
+            this(hill, new ArrayList<>());
         }
 
         Hill.Point point() {
@@ -103,12 +109,6 @@ record RouteMap(
                     .nonNull()
                     .filter(neighbor -> neighbor.hill.height() >= hill.height() - 1)
                     .forEach(previous::add);
-
-            StreamEx.of(hill.point().possibleNeighbors())
-                    .map(nodes::get)
-                    .nonNull()
-                    .filter(neighbor -> neighbor.hill.height() <= hill.height() + 1)
-                    .forEach(next::add);
         }
 
         @Override
