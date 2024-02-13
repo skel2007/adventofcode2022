@@ -15,8 +15,8 @@ public final class Utils {
         try {
             var resource = Objects.requireNonNull(clazz.getResource(filename));
             return Files.readAllLines(Paths.get(resource.toURI()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ee) {
+            throw new RuntimeException(ee);
         }
     }
 
